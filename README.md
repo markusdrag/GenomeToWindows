@@ -23,7 +23,7 @@ A versatile Bash script that automatically downloads genomes from Ensembl or UCS
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/yourusername/GenomeToWindows.git
+git clone https://github.com/markusdrag/GenomeToWindows.git
 cd GenomeToWindows
 ```
 
@@ -177,7 +177,7 @@ If you use this tool in your research, please cite:
 
 ```
 Drag, M. (2025). Genome Window Generator: Automated genome downloading and windowing tool.
-Part of the MethylSense package. GitHub: https://github.com/yourusername/GenomeToWindows
+Part of the MethylSense package. GitHub: https://github.com/markusdrag/GenomeToWindows
 ```
 
 ## Related Projects
