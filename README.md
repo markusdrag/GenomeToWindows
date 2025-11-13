@@ -1,19 +1,11 @@
 <div align="center">
 
-```
-╔═══════════════════════════════════════════════════════════════╗
-║                                                               ║
-║   ╔═══╗                                 ╦ ╦╦╔╗╔╔╦╗╔═╗╦ ╦╔═╗   ║
-║   ║ ═╬═ GENOME                          ║║║║║║║ ║║║ ║║║╚═╗   ║
-║   ╚═══╝                                 ╚╩╝╩╝╚╝═╩╝╚═╝╚╝╚═╝   ║
-║    ▓▓▓    ▓▓▓    ▓▓▓    ▓▓▓    ▓▓▓                          ║
-║   └───┘  └───┘  └───┘  └───┘  └───┘                         ║
-║                                                               ║
-╚═══════════════════════════════════════════════════════════════╝
-```
+<img src="logo.svg" alt="Genome Window Generator Logo" width="800"/>
 
-### Automated Genome Downloading & Windowing Tool
-#### Part of the MethylSense Package
+<p>
+  <strong>Automated Genome Downloading & Windowing Tool</strong><br>
+  <em>Part of the MethylSense Package</em>
+</p>
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![bioRxiv](https://img.shields.io/badge/bioRxiv-10.1101%2F2025.04.11.648151-b31b1b.svg)](https://www.biorxiv.org/content/10.1101/2025.04.11.648151v1.full)

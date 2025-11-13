@@ -1,0 +1,76 @@
+<svg width="800" height="200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="800" height="200" fill="#f8f9fa"/>
+
+  <!-- Genome representation (left side) - DNA helix style -->
+  <g id="genome">
+    <!-- Chromosome/DNA visualization -->
+    <rect x="40" y="60" width="200" height="80" rx="10" fill="#4a90e2" opacity="0.2"/>
+
+    <!-- DNA segments -->
+    <rect x="50" y="70" width="35" height="60" rx="5" fill="#4a90e2"/>
+    <rect x="95" y="70" width="35" height="60" rx="5" fill="#5ba3f5"/>
+    <rect x="140" y="70" width="35" height="60" rx="5" fill="#4a90e2"/>
+    <rect x="185" y="70" width="35" height="60" rx="5" fill="#5ba3f5"/>
+
+    <!-- DNA strand lines -->
+    <path d="M 48 100 Q 68 85, 88 100 Q 108 115, 128 100 Q 148 85, 168 100 Q 188 115, 208 100"
+          stroke="#2c5aa0" stroke-width="2" fill="none"/>
+    <path d="M 48 100 Q 68 115, 88 100 Q 108 85, 128 100 Q 148 115, 168 100 Q 188 85, 208 100"
+          stroke="#2c5aa0" stroke-width="2" fill="none"/>
+
+    <!-- Label -->
+    <text x="140" y="160" font-family="Arial, sans-serif" font-size="16" font-weight="bold"
+          fill="#2c5aa0" text-anchor="middle">GENOME</text>
+  </g>
+
+  <!-- Arrow -->
+  <g id="arrow">
+    <path d="M 260 100 L 310 100 L 310 85 L 340 110 L 310 135 L 310 120 L 260 120 Z"
+          fill="#6c757d" opacity="0.6"/>
+  </g>
+
+  <!-- Windows representation (right side) -->
+  <g id="windows">
+    <!-- Window segments of different sizes -->
+    <g id="window-segments">
+      <!-- 1KB -->
+      <rect x="370" y="95" width="25" height="10" rx="2" fill="#28a745" opacity="0.8"/>
+      <text x="382.5" y="118" font-family="monospace" font-size="8" fill="#28a745"
+            text-anchor="middle">1KB</text>
+
+      <!-- 5KB -->
+      <rect x="405" y="85" width="30" height="30" rx="2" fill="#20c997" opacity="0.8"/>
+      <text x="420" y="125" font-family="monospace" font-size="8" fill="#20c997"
+            text-anchor="middle">5KB</text>
+
+      <!-- 10KB -->
+      <rect x="445" y="75" width="35" height="50" rx="2" fill="#17a2b8" opacity="0.8"/>
+      <text x="462.5" y="135" font-family="monospace" font-size="8" fill="#17a2b8"
+            text-anchor="middle">10KB</text>
+
+      <!-- 15KB -->
+      <rect x="490" y="70" width="40" height="60" rx="2" fill="#007bff" opacity="0.8"/>
+      <text x="510" y="140" font-family="monospace" font-size="8" fill="#007bff"
+            text-anchor="middle">15KB</text>
+
+      <!-- 20KB -->
+      <rect x="540" y="65" width="45" height="70" rx="2" fill="#6610f2" opacity="0.8"/>
+      <text x="562.5" y="145" font-family="monospace" font-size="8" fill="#6610f2"
+            text-anchor="middle">20KB</text>
+
+      <!-- 25KB -->
+      <rect x="595" y="60" width="50" height="80" rx="2" fill="#6f42c1" opacity="0.8"/>
+      <text x="620" y="150" font-family="monospace" font-size="8" fill="#6f42c1"
+            text-anchor="middle">25KB</text>
+    </g>
+
+    <!-- Label -->
+    <text x="510" y="170" font-family="Arial, sans-serif" font-size="16" font-weight="bold"
+          fill="#495057" text-anchor="middle">WINDOWS</text>
+  </g>
+
+  <!-- Title text -->
+  <text x="400" y="35" font-family="Arial, sans-serif" font-size="28" font-weight="bold"
+        fill="#212529" text-anchor="middle">Genome Window Generator</text>
+</svg>
