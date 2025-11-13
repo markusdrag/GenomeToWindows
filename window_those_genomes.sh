@@ -103,7 +103,7 @@ done
 
 # Validate database option
 if [[ "$DATABASE" != "ensembl" && "$DATABASE" != "ucsc" ]]; then
-    echo "❌ Error: Database must be either 'ensembl' or 'ucsc'"
+    echo "[ERROR] Database must be either 'ensembl' or 'ucsc'"
     exit 1
 fi
 
@@ -112,7 +112,7 @@ download_from_ensembl() {
     local species=$1
     local genome_dir=$2
 
-    echo "🌐 Downloading genome for $species from Ensembl..."
+    echo "[NET] Downloading genome for $species from Ensembl..."
 
     # Create genome directory if it doesn't exist
     mkdir -p "$genome_dir"
@@ -121,26 +121,26 @@ download_from_ensembl() {
     local species_lower=$(echo "$species" | tr '[:upper:]' '[:lower:]')
 
     # Try to get the latest release number
-    echo "🔍 Finding latest Ensembl release..."
+    echo "[SEARCH] Finding latest Ensembl release..."
     local latest_release=$(curl -s "https://ftp.ensembl.org/pub/" | grep -oP 'release-\K[0-9]+' | sort -n | tail -1)
 
     if [ -z "$latest_release" ]; then
-        echo "⚠️  Could not determine latest release, using current_fasta"
+        echo "[WARN]  Could not determine latest release, using current_fasta"
         local base_url="https://ftp.ensembl.org/pub/current_fasta"
     else
-        echo "📦 Using Ensembl release $latest_release"
+        echo "[PKG] Using Ensembl release $latest_release"
         local base_url="https://ftp.ensembl.org/pub/release-${latest_release}/fasta"
     fi
 
     local fasta_url="${base_url}/${species_lower}/dna/"
 
-    echo "🔍 Searching for primary assembly or toplevel DNA file..."
+    echo "[SEARCH] Searching for primary assembly or toplevel DNA file..."
 
     # Try to find the primary assembly file first, then toplevel
     local genome_file=$(curl -s "$fasta_url" | grep -oP "${species}[^\"]*\.dna\.(primary_assembly|toplevel)\.fa\.gz" | head -1)
 
     if [ -z "$genome_file" ]; then
-        echo "❌ Could not find genome file for $species at Ensembl"
+        echo "[ERROR] Could not find genome file for $species at Ensembl"
         echo "   Tried URL: $fasta_url"
         return 1
     fi
@@ -148,7 +148,7 @@ download_from_ensembl() {
     local download_url="${fasta_url}${genome_file}"
     local output_file="${genome_dir}/${genome_file}"
 
-    echo "⬇️  Downloading: $genome_file"
+    echo "[DOWNLOAD]  Downloading: $genome_file"
     echo "   From: $download_url"
 
     if $DRY_RUN; then
@@ -156,14 +156,14 @@ download_from_ensembl() {
         echo "[dry-run] gunzip \"$output_file\""
     else
         curl -L -o "$output_file" "$download_url" || {
-            echo "❌ Download failed"
+            echo "[ERROR] Download failed"
             return 1
         }
-        echo "📦 Extracting genome..."
+        echo "[PKG] Extracting genome..."
         gunzip "$output_file"
     fi
 
-    echo "✅ Genome downloaded successfully"
+    echo "[OK] Genome downloaded successfully"
     return 0
 }
 
@@ -171,7 +171,7 @@ download_from_ucsc() {
     local species=$1
     local genome_dir=$2
 
-    echo "🌐 Downloading genome for $species from UCSC..."
+    echo "[NET] Downloading genome for $species from UCSC..."
 
     # Create genome directory if it doesn't exist
     mkdir -p "$genome_dir"
@@ -194,7 +194,7 @@ download_from_ucsc() {
     local ucsc_db="${ucsc_names[$species]}"
 
     if [ -z "$ucsc_db" ]; then
-        echo "❌ Species $species not found in UCSC mapping"
+        echo "[ERROR] Species $species not found in UCSC mapping"
         echo "   Please specify one of: ${!ucsc_names[@]}"
         return 1
     fi
@@ -204,7 +204,7 @@ download_from_ucsc() {
     local download_url="${base_url}/${genome_file}"
     local output_file="${genome_dir}/${genome_file}"
 
-    echo "⬇️  Downloading: $genome_file (UCSC: $ucsc_db)"
+    echo "[DOWNLOAD]  Downloading: $genome_file (UCSC: $ucsc_db)"
     echo "   From: $download_url"
 
     if $DRY_RUN; then
@@ -212,21 +212,21 @@ download_from_ucsc() {
         echo "[dry-run] gunzip \"$output_file\""
     else
         curl -L -o "$output_file" "$download_url" || {
-            echo "❌ Download failed"
+            echo "[ERROR] Download failed"
             return 1
         }
-        echo "📦 Extracting genome..."
+        echo "[PKG] Extracting genome..."
         gunzip "$output_file"
     fi
 
-    echo "✅ Genome downloaded successfully"
+    echo "[OK] Genome downloaded successfully"
     return 0
 }
 
 # === DOWNLOAD GENOME IF REQUESTED ===
 if $DOWNLOAD_GENOME; then
     if [ -z "$SPECIES" ]; then
-        echo "❌ Error: Species name required when downloading genome"
+        echo "[ERROR] Error: Species name required when downloading genome"
         echo "   Use -s or --species flag"
         exit 1
     fi
@@ -242,9 +242,9 @@ if $DOWNLOAD_GENOME; then
         download_from_ensembl "$SPECIES" "$GENOME_DIR"
         if [ $? -ne 0 ]; then
             echo ""
-            echo "⚠️  Ensembl download failed. Trying UCSC as fallback..."
+            echo "[WARN]  Ensembl download failed. Trying UCSC as fallback..."
             download_from_ucsc "$SPECIES" "$GENOME_DIR" || {
-                echo "❌ Both Ensembl and UCSC downloads failed"
+                echo "[ERROR] Both Ensembl and UCSC downloads failed"
                 exit 1
             }
         fi
@@ -252,9 +252,9 @@ if $DOWNLOAD_GENOME; then
         download_from_ucsc "$SPECIES" "$GENOME_DIR"
         if [ $? -ne 0 ]; then
             echo ""
-            echo "⚠️  UCSC download failed. Trying Ensembl as fallback..."
+            echo "[WARN]  UCSC download failed. Trying Ensembl as fallback..."
             download_from_ensembl "$SPECIES" "$GENOME_DIR" || {
-                echo "❌ Both UCSC and Ensembl downloads failed"
+                echo "[ERROR] Both UCSC and Ensembl downloads failed"
                 exit 1
             }
         fi
@@ -264,7 +264,7 @@ if $DOWNLOAD_GENOME; then
 fi
 
 # === MICROMAMBA SETUP ===
-cd "$PROJECT_ROOT" || { echo "❌ Could not cd to project root: $PROJECT_ROOT"; exit 1; }
+cd "$PROJECT_ROOT" || { echo "[ERROR] Could not cd to project root: $PROJECT_ROOT"; exit 1; }
 
 # Ensure micromamba is initialized
 export MAMBA_ROOT_PREFIX="$HOME/micromamba"
@@ -273,22 +273,22 @@ export MAMBA_ROOT_PREFIX="$HOME/micromamba"
 if command -v micromamba &> /dev/null; then
     eval "$(micromamba shell hook --shell bash)"
 else
-    echo "❌ micromamba not found. Please install micromamba first."
+    echo "[ERROR] micromamba not found. Please install micromamba first."
     exit 1
 fi
 
 # Check if environment exists, create if it doesn't
 if ! $DRY_RUN; then
     if ! micromamba env list | grep -q "^$ENV_NAME "; then
-        echo "🔧 Creating micromamba environment '$ENV_NAME'..."
+        echo "[SETUP] Creating micromamba environment '$ENV_NAME'..."
         micromamba create -n "$ENV_NAME" -c conda-forge -c bioconda bedtools samtools -y || {
-            echo "❌ Failed to create micromamba environment: $ENV_NAME"
+            echo "[ERROR] Failed to create micromamba environment: $ENV_NAME"
             exit 1
         }
     fi
-    echo "🔧 Activating micromamba environment '$ENV_NAME'..."
+    echo "[SETUP] Activating micromamba environment '$ENV_NAME'..."
     micromamba activate "$ENV_NAME" || {
-        echo "❌ Failed to activate micromamba environment: $ENV_NAME"
+        echo "[ERROR] Failed to activate micromamba environment: $ENV_NAME"
         echo "Try running: micromamba create -n $ENV_NAME -c conda-forge -c bioconda bedtools samtools -y"
         exit 1
     }
@@ -326,11 +326,11 @@ echo "Window sizes (bp): ${WINDOW_SIZES[*]}"
 echo "=================================="
 echo ""
 
-echo "🔍 Scanning for genome files in: $GENOME_DIR"
+echo "[SEARCH] Scanning for genome files in: $GENOME_DIR"
 mapfile -t GENOMES < <(find "$GENOME_DIR" -type f \( -name "*.fna" -o -name "*.fa" \))
 
 if [[ ${#GENOMES[@]} -eq 0 ]]; then
-    echo "❌ No genome files found in $GENOME_DIR"
+    echo "[ERROR] No genome files found in $GENOME_DIR"
     exit 1
 fi
 
@@ -363,4 +363,4 @@ for GENOME in "${GENOMES[@]}"; do
     done
 done
 
-echo -e "\n✅ Done. Windowed BED files written to: $OUTPUT_DIR"
+echo -e "\n[OK] Done. Windowed BED files written to: $OUTPUT_DIR"

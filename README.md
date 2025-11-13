@@ -1,4 +1,28 @@
-# Genome Window Generator
+<div align="center">
+
+```
+╔═══════════════════════════════════════════════════════════════╗
+║                                                               ║
+║   ╔═══╗                                 ╦ ╦╦╔╗╔╔╦╗╔═╗╦ ╦╔═╗   ║
+║   ║ ═╬═ GENOME                          ║║║║║║║ ║║║ ║║║╚═╗   ║
+║   ╚═══╝                                 ╚╩╝╩╝╚╝═╩╝╚═╝╚╝╚═╝   ║
+║    ▓▓▓    ▓▓▓    ▓▓▓    ▓▓▓    ▓▓▓                          ║
+║   └───┘  └───┘  └───┘  └───┘  └───┘                         ║
+║                                                               ║
+╚═══════════════════════════════════════════════════════════════╝
+```
+
+### Automated Genome Downloading & Windowing Tool
+#### Part of the MethylSense Package
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![bioRxiv](https://img.shields.io/badge/bioRxiv-10.1101%2F2025.04.11.648151-b31b1b.svg)](https://www.biorxiv.org/content/10.1101/2025.04.11.648151v1.full)
+
+</div>
+
+---
+
+## Overview
 
 A versatile Bash script that automatically downloads genomes from Ensembl or UCSC databases and generates genomic windows of specified sizes. This tool is part of the **MethylSense** package preprocessing pipeline.
 
@@ -21,19 +45,43 @@ A versatile Bash script that automatically downloads genomes from Ensembl or UCS
 
 ## Installation
 
+### Quick Install (Recommended)
+
 1. Clone this repository:
 ```bash
 git clone https://github.com/markusdrag/GenomeToWindows.git
 cd GenomeToWindows
 ```
 
-2. Ensure micromamba is installed:
+2. Run the installation script:
 ```bash
-# If you don't have micromamba, install it:
-"${SHELL}" <(curl -L micro.mamba.pm/install.sh)
+./install.sh
 ```
 
-3. Make the script executable:
+That's it! The installation script will:
+- Automatically detect or install micromamba/conda/mamba
+- Create the required environment with all dependencies (bedtools, samtools, curl)
+- Make all scripts executable
+- Provide you with usage instructions
+
+### Manual Installation
+
+If you prefer to install manually:
+
+1. Ensure micromamba/conda is installed:
+```bash
+# Install micromamba (recommended - fastest)
+"${SHELL}" <(curl -L micro.mamba.pm/install.sh)
+
+# OR use conda/mamba if you already have it
+```
+
+2. Create the environment:
+```bash
+micromamba create -n bedtools_env -c conda-forge -c bioconda bedtools samtools curl -y
+```
+
+3. Make scripts executable:
 ```bash
 chmod +x window_those_genomes.sh
 ```
@@ -173,12 +221,14 @@ MIT License - see LICENSE file for details
 
 ## Citation
 
-If you use this tool in your research, please cite:
+If you use this tool in your research, please cite the MethylSense paper:
 
 ```
-Drag, M. (2025). Genome Window Generator: Automated genome downloading and windowing tool.
-Part of the MethylSense package. GitHub: https://github.com/markusdrag/GenomeToWindows
+Drag, M., et al. (2025). MethylSense: A comprehensive toolkit for DNA methylation analysis.
+bioRxiv. https://www.biorxiv.org/content/10.1101/2025.04.11.648151v1.full
 ```
+
+GitHub repository: https://github.com/markusdrag/GenomeToWindows
 
 ## Related Projects
 
