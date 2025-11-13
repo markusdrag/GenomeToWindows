@@ -221,11 +221,12 @@ MIT License - see LICENSE file for details
 
 ## Citation
 
-If you use this tool in your research, please cite the MethylSense paper:
+If you use this tool in your research, please cite:
 
 ```
-Drag, M., et al. (2025). MethylSense: A comprehensive toolkit for DNA methylation analysis.
-bioRxiv. https://www.biorxiv.org/content/10.1101/2025.04.11.648151v1.full
+Drag, M., et al. (2025). New high accuracy diagnostics for avian Aspergillus fumigatus
+infection using Nanopore methylation sequencing of host cell-free DNA and machine
+learning prediction. bioRxiv. https://doi.org/10.1101/2025.04.11.648151
 ```
 
 GitHub repository: https://github.com/markusdrag/GenomeToWindows
