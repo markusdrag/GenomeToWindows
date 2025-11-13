@@ -1,0 +1,64 @@
+# Claude Code directory
+.claude/
+
+# Genome files (large binary/text files)
+genomes/
+*.fa
+*.fna
+*.fasta
+*.fa.gz
+*.fna.gz
+*.fasta.gz
+*.fai
+*.genome
+
+# Output files
+windowed_genomes/
+*.bed
+*.bed.gz
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*~
+
+# Editor files
+*.swp
+*.swo
+*.swn
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Conda/Micromamba
+.conda/
+.mamba/
+*.conda
+*.mamba
+
+# Python (if future scripts added)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+.eggs/
+
+# Test files
+test_output/
+test_genomes/
