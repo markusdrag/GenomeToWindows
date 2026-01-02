@@ -70,11 +70,20 @@ For automatic dependency management:
 ### Download and Process
 
 ```bash
-# Download human genome and generate windows
+# Download human genome from Ensembl and generate default windows
 ./window_those_genomes.sh --species Homo_sapiens
 
-# Download with custom window sizes
+# Download chicken genome with benchmarking window sizes
+./window_those_genomes.sh --species Gallus_gallus --windows 200,400,500,750,1000
+
+# Download mouse genome with custom window sizes
 ./window_those_genomes.sh --species Mus_musculus --windows 1000,5000,10000
+
+# Use UCSC database instead of Ensembl
+./window_those_genomes.sh --species Homo_sapiens --database ucsc
+
+# Preview download commands without executing (dry-run)
+./window_those_genomes.sh --species Gallus_gallus --dry-run
 ```
 
 ### Process Directory of Genomes
