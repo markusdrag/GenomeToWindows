@@ -9,6 +9,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![bioRxiv](https://img.shields.io/badge/bioRxiv-10.1101%2F2025.04.11.648151-b31b1b.svg)](https://www.biorxiv.org/content/10.1101/2025.04.11.648151v1.full)
+[![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)](https://github.com/markusdrag/GenomeToWindows)
 
 </div>
 
@@ -16,196 +17,143 @@
 
 ## Overview
 
-A versatile Bash script that automatically downloads genomes from Ensembl or UCSC databases and generates genomic windows of specified sizes. This tool is part of the **MethylSense** package preprocessing pipeline.
+A versatile Bash script that generates genomic windows of specified sizes from FASTA files. Can also automatically download genomes from Ensembl or UCSC databases. This tool is part of the **MethylSense** package preprocessing pipeline.
 
 ## Features
 
+- **Direct FASTA input** - Process local genome files with `--genome` flag (v1.1)
 - **Automatic genome downloading** from Ensembl or UCSC databases
-- **Flexible window sizes** with sensible defaults (1kb, 5kb, 10kb, 15kb, 20kb, 25kb)
-- **Automatic fallback** between databases if download fails
+- **Flexible window sizes** with sensible defaults
+- **macOS compatible** - Works on both Linux and macOS (v1.1)
+- **System tools fallback** - Use system bedtools/samtools with `--no-micromamba` (v1.1)
 - **Progress tracking** with visual progress bars
 - **Dry-run mode** to preview commands before execution
-- **Automated environment setup** using micromamba/conda
 
 ## Requirements
 
-- **Bash** (4.0+)
-- **micromamba** or **conda** (for managing dependencies)
+- **Bash** (3.2+, macOS compatible)
+- **bedtools** and **samtools** (via system install OR micromamba)
 - **curl** (for downloading genomes)
-- **bedtools** (installed automatically via micromamba)
-- **samtools** (installed automatically via micromamba)
 
 ## Installation
 
 ### Quick Install (Recommended)
 
-1. Clone this repository:
 ```bash
 git clone https://github.com/markusdrag/GenomeToWindows.git
 cd GenomeToWindows
+chmod +x window_those_genomes.sh
 ```
 
-2. Run the installation script:
+If you have bedtools and samtools installed, you're ready to go with `--no-micromamba`.
+
+### With Micromamba (Optional)
+
+For automatic dependency management:
 ```bash
 ./install.sh
 ```
 
-That's it! The installation script will:
-- Automatically detect or install micromamba/conda/mamba
-- Create the required environment with all dependencies (bedtools, samtools, curl)
-- Make all scripts executable
-- Provide you with usage instructions
-
-### Manual Installation
-
-If you prefer to install manually:
-
-1. Ensure micromamba/conda is installed:
-```bash
-# Install micromamba (recommended - fastest)
-"${SHELL}" <(curl -L micro.mamba.pm/install.sh)
-
-# OR use conda/mamba if you already have it
-```
-
-2. Create the environment:
-```bash
-micromamba create -n bedtools_env -c conda-forge -c bioconda bedtools samtools curl -y
-```
-
-3. Make scripts executable:
-```bash
-chmod +x window_those_genomes.sh
-```
-
 ## Usage
 
-### Quick Start
+### Process a Local FASTA File (Recommended)
 
-Download human genome and generate default windows:
 ```bash
-./window_those_genomes.sh --species Homo_sapiens
+# Process your local genome file
+./window_those_genomes.sh \
+  --genome /path/to/genome.fna \
+  --windows 200,400,500,750,1000 \
+  --output ./my_windows \
+  --no-micromamba
 ```
 
-### Common Examples
+### Download and Process
 
-**Download mouse genome with custom window sizes:**
 ```bash
+# Download human genome and generate windows
+./window_those_genomes.sh --species Homo_sapiens
+
+# Download with custom window sizes
 ./window_those_genomes.sh --species Mus_musculus --windows 1000,5000,10000
 ```
 
-**Use UCSC database instead of Ensembl:**
-```bash
-./window_those_genomes.sh --species Homo_sapiens --database ucsc
-```
+### Process Directory of Genomes
 
-**Process existing genome files:**
 ```bash
 ./window_those_genomes.sh --input ./my_genomes --output ./my_windows
-```
-
-**Preview commands without executing (dry-run):**
-```bash
-./window_those_genomes.sh --species Homo_sapiens --dry-run
 ```
 
 ### Command-Line Options
 
 ```
 Options:
-  -s, --species SPECIES  Scientific name of species (e.g., "Homo_sapiens")
-                         When specified, genome will be automatically downloaded
-  -d, --database DB      Database to use: ensembl or ucsc (default: ensembl)
+  -g, --genome FILE    Direct path to a FASTA file (.fna/.fa/.fasta)
+                       This is the PREFERRED option for local files
+  --fai FILE           Direct path to a FAI index file (skips samtools indexing)
+  -s, --species SPECIES  Scientific name (e.g., "Homo_sapiens") - downloads genome
+  -d, --database DB      Database: ensembl or ucsc (default: ensembl)
   -i, --input DIR        Input directory with .fna/.fa files (default: ./genomes)
   -o, --output DIR       Output directory for BED files (default: ./windowed_genomes)
-  -w, --windows SIZES    Comma-separated window sizes in bp (default: 1000,5000,10000,15000,20000,25000)
-                         Example: -w 1000,5000,10000
-  --dry-run              Preview commands without executing them
-  -h, --help             Show this help message
+  -w, --windows SIZES    Comma-separated window sizes in bp
+                         Example: -w 200,400,500,750,1000
+  --no-micromamba        Use system bedtools/samtools instead of micromamba
+  --dry-run              Preview commands without executing
+  -h, --help             Show help message
+  -v, --version          Show version
 ```
 
-## Supported Species
+## Examples
+
+### MethylSense Benchmarking (200-1000bp windows)
+
+```bash
+./window_those_genomes.sh \
+  --genome /path/to/Gallus_gallus.GRCg7b.dna.toplevel.fna \
+  --windows 200,400,500,750,1000 \
+  --output ./benchmark_windows \
+  --no-micromamba
+```
+
+### Using Pre-existing FAI Index
+
+```bash
+./window_those_genomes.sh \
+  --genome /path/to/genome.fna \
+  --fai /path/to/genome.fna.fai \
+  --windows 1000,5000,10000
+```
+
+## Supported Species (for download)
 
 ### Ensembl
-Supports all species available in Ensembl (100+ species). The script automatically finds the latest assembly.
-
-Common examples:
-- `Homo_sapiens` (Human)
-- `Mus_musculus` (Mouse)
-- `Rattus_norvegicus` (Rat)
-- `Danio_rerio` (Zebrafish)
-- `Drosophila_melanogaster` (Fruit fly)
-- `Caenorhabditis_elegans` (C. elegans)
-- And many more...
+All species in Ensembl (100+ species). Common examples:
+- `Homo_sapiens`, `Mus_musculus`, `Rattus_norvegicus`
+- `Danio_rerio`, `Gallus_gallus`, `Bos_taurus`
 
 ### UCSC
-Pre-configured species mapping:
+Pre-configured mapping:
 - `Homo_sapiens` → hg38
 - `Mus_musculus` → mm39
-- `Rattus_norvegicus` → rn7
-- `Danio_rerio` → danRer11
-- `Drosophila_melanogaster` → dm6
-- `Caenorhabditis_elegans` → ce11
-- `Saccharomyces_cerevisiae` → sacCer3
 - `Gallus_gallus` → galGal6
-- `Sus_scrofa` → susScr11
-- `Bos_taurus` → bosTau9
-- `Canis_familiaris` → canFam6
+- And more...
 
 ## Output
 
-The script generates:
-1. **Genome files** in `./genomes/` (if downloaded)
-2. **BED window files** in `./windowed_genomes/` with naming format:
-   - `{genome_name}_{window_size}bp.bed`
-   - Example: `Homo_sapiens_1000bp.bed`
+BED files in `./windowed_genomes/` (or custom `--output`):
+- `{genome_name}_{window_size}bp.bed`
+- Example: `Gallus_gallus_500bp.bed`
 
-### BED File Format
-Standard BED format with 3 columns:
-```
-chromosome    start    end
-chr1          0        1000
-chr1          1000     2000
-chr1          2000     3000
-...
-```
+## Changelog
 
-## How It Works
+### v1.1.0 (2026-01-02)
+- **NEW:** `--genome` flag for direct FASTA input
+- **NEW:** `--fai` flag for direct FAI index input
+- **NEW:** `--no-micromamba` to use system tools
+- **FIX:** macOS compatibility (removed GNU grep -P)
+- **FIX:** Bash 3.x compatibility (removed associative arrays)
 
-1. **Download Phase** (if `--species` is specified):
-   - Connects to Ensembl or UCSC FTP servers
-   - Finds the latest genome assembly
-   - Downloads and extracts the genome
-   - Falls back to alternate database if download fails
-
-2. **Windowing Phase**:
-   - Creates micromamba environment with bedtools and samtools
-   - Indexes genome files using samtools
-   - Generates genomic windows using bedtools
-   - Creates BED files for each specified window size
-
-## Troubleshooting
-
-### Download fails for both databases
-- Check your internet connection
-- Verify species name spelling (use underscores: `Homo_sapiens`)
-- Try specifying a different database with `--database`
-
-### micromamba not found
-Install micromamba:
-```bash
-"${SHELL}" <(curl -L micro.mamba.pm/install.sh)
-```
-
-### Permission denied
-Make the script executable:
-```bash
-chmod +x window_those_genomes.sh
-```
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+### v1.0.0
+- Initial release
 
 ## License
 
@@ -213,26 +161,13 @@ MIT License - see LICENSE file for details
 
 ## Citation
 
-If you use this tool in your research, please cite:
-
 ```
 Drag, M., et al. (2025). New high accuracy diagnostics for avian Aspergillus fumigatus
 infection using Nanopore methylation sequencing of host cell-free DNA and machine
 learning prediction. bioRxiv. https://doi.org/10.1101/2025.04.11.648151
 ```
 
-GitHub repository: https://github.com/markusdrag/GenomeToWindows
-
-## Related Projects
-
-- **MethylSense**: Main package for methylation analysis (link TBA)
-
 ## Contact
 
-For questions or issues, please open an issue on GitHub or contact:
-- Markus Drag - markusdrag@gmail.com
-
-## Acknowledgments
-
-- Ensembl and UCSC Genome Browser for providing genome data
-- bedtools and samtools development teams
+- Issues: [GitHub Issues](https://github.com/markusdrag/GenomeToWindows/issues)
+- Email: markusdrag@gmail.com
