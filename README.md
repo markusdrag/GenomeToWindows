@@ -115,18 +115,27 @@ Options:
 
 ### Quick Start: Download and Window a Genome
 
+The easiest way to get started is to let the script automatically download a genome from Ensembl. Just specify the species name and your desired window sizes:
+
 ```bash
-# Download human genome from Ensembl and generate windows
+# Download human genome from Ensembl and generate 1kb, 5kb, and 10kb windows
 ./window_those_genomes.sh --species Homo_sapiens --windows 1000,5000,10000
 
-# Download chicken genome with MethylSense benchmarking sizes
+# Download chicken genome with MethylSense benchmarking sizes (200bp to 1000bp)
 ./window_those_genomes.sh --species Gallus_gallus --windows 200,400,500,750,1000
 
-# Download mouse genome from UCSC
+# Download mouse genome from UCSC instead of Ensembl
 ./window_those_genomes.sh --species Mus_musculus --database ucsc
 ```
 
-### MethylSense Benchmarking (200-1000bp windows)
+The script will:
+1. Download the genome FASTA from the selected database
+2. Index it with `samtools faidx`
+3. Generate BED files with non-overlapping windows for each specified size
+
+### Using a Local Genome File
+
+If you already have a genome FASTA file on your system, use `--genome` to process it directly. This is faster and avoids re-downloading:
 
 ```bash
 ./window_those_genomes.sh \
@@ -136,7 +145,11 @@ Options:
   --no-micromamba
 ```
 
-### Using Pre-existing FAI Index
+> **Tip:** Use `--no-micromamba` if you have bedtools and samtools already installed on your system.
+
+### Skipping Indexing with Pre-existing FAI
+
+If you already have a `.fai` index file, you can skip the indexing step entirely by providing it with `--fai`:
 
 ```bash
 ./window_those_genomes.sh \
@@ -144,6 +157,8 @@ Options:
   --fai /path/to/genome.fna.fai \
   --windows 1000,5000,10000
 ```
+
+This is useful when working with very large genomes where indexing can take several minutes.
 
 ## Supported Species (for download)
 
