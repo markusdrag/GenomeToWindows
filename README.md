@@ -113,6 +113,19 @@ Options:
 
 ## Examples
 
+### Quick Start: Download and Window a Genome
+
+```bash
+# Download human genome from Ensembl and generate windows
+./window_those_genomes.sh --species Homo_sapiens --windows 1000,5000,10000
+
+# Download chicken genome with MethylSense benchmarking sizes
+./window_those_genomes.sh --species Gallus_gallus --windows 200,400,500,750,1000
+
+# Download mouse genome from UCSC
+./window_those_genomes.sh --species Mus_musculus --database ucsc
+```
+
 ### MethylSense Benchmarking (200-1000bp windows)
 
 ```bash
