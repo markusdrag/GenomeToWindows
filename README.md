@@ -1,6 +1,10 @@
 <div align="center">
 
-<img src="logo.svg" alt="Genome Window Generator Logo" width="800"/>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="logo_dark_bg.png">
+  <source media="(prefers-color-scheme: light)" srcset="logo_white_bg.png">
+  <img alt="GenomeToWindows Logo" src="logo_white_bg.png" width="400">
+</picture>
 
 <p>
   <strong>Automated Genome Downloading & Windowing Tool</strong><br>
