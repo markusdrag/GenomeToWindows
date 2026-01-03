@@ -1,9 +1,9 @@
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="logo_dark_bg.png">
-  <source media="(prefers-color-scheme: light)" srcset="logo_white_bg.png">
-  <img alt="GenomeToWindows Logo" src="logo_white_bg.png" width="400">
+  <source media="(prefers-color-scheme: dark)" srcset="logo_dark_bg.png?v=3">
+  <source media="(prefers-color-scheme: light)" srcset="logo_white_bg.png?v=3">
+  <img alt="GenomeToWindows Logo" src="logo_white_bg.png?v=3" width="400">
 </picture>
 
 <p>
